@@ -2,7 +2,17 @@
 
 {% block main %}
 
+
+
 <div class="hero">
+    
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
     <div class="heading">
         <h1>Quiz <br> Master</h1>
         <div class="herobtns">
@@ -14,13 +24,13 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" id="loginForm">
+                        <form action="/login_user" method="post" id="loginForm">
                             <div class="col">
                                 <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="usrnm">
                             </div>
                             <br>
                             <div class="col">
-                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="cpswd">
+                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="pswd">
                             </div>
                             <br>
         
@@ -83,7 +93,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="post" id="regForm">
+                <form action="/register_user" method="post" id="regForm">
                     <div class="row">
                         <div class="col">
                           <input type="text" class="form-control" placeholder="First name" aria-label="First name" name="fname">
@@ -91,10 +101,6 @@
                         <div class="col">
                           <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" name="lname">
                         </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="First name" aria-label="First name" name="fname">
                     </div>
                     <br>
                     <div class="col">
@@ -127,7 +133,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" form="regForm">Submit</button>
+                <button type="submit" class="btn btn-primary" form="regForm">Submit</button>
             </div>
         </div>
     </div>

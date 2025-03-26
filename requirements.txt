@@ -1,2 +1,5 @@
 Flask
 flask-SQLAlchemy
+flask-login
+Flask-Migrate
+Flask-Login

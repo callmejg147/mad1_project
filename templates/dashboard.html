@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="header">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <h2>{{ current_user.fname }} {{ current_user.lname }}</h2>
+    <p>{{ current_user.dob }}</p>
+    <p>{{ current_user.qualification }}</p>
+</div>
+
+{% endblock %}

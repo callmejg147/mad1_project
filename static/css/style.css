@@ -42,3 +42,8 @@ body {
     /* justify-content: center;
     align-items: center; */
 }
+.header {
+    padding: 5%;
+    border-bottom: 2px black solid;
+    transition: ease 0.5s;
+}
