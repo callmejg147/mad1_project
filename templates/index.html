@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="hero">
+    <div class="heading">
+        <h1>Quiz <br> Master</h1>
+        <div class="herobtns">
+            <div class="modal fade" id="loginModal" aria-hidden="true" aria-labelledby="loginModalLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="loginModalLabel">Student Login</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" id="loginForm">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="usrnm">
+                            </div>
+                            <br>
+                            <div class="col">
+                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="cpswd">
+                            </div>
+                            <br>
+        
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-outline-secondary" data-bs-target="#adminModal" data-bs-toggle="modal">Admin</button>
+                      <button class="btn btn-primary" form="loginForm" type="submit">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="adminModal" aria-hidden="true" aria-labelledby="adminModalLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="adminModalLabel">Admin Login</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" id="adminForm">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="usrnm">
+                            </div>
+                            <br>
+                            <div class="col">
+                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="cpswd">
+                            </div>
+                            <br>
+        
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" data-bs-target="#loginModal" data-bs-toggle="modal">Back</button>
+                      <button class="btn btn-primary" form="adminForm" type="submit">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary" data-bs-target="#loginModal" data-bs-toggle="modal">LOGIN</button>
+            
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerModal">
+                REGISTER
+            </button>
+        </div>
+    </div>
+    
+
+  
+  
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registration Form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="regForm">
+                    <div class="row">
+                        <div class="col">
+                          <input type="text" class="form-control" placeholder="First name" aria-label="First name" name="fname">
+                        </div>
+                        <div class="col">
+                          <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" name="lname">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name" name="fname">
+                    </div>
+                    <br>
+                    <div class="col">
+                        <input type="email" class="form-control" placeholder="Email" aria-label="Email" name="email">
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                          <input type="text" class="form-control" placeholder="Qualification" aria-label="Qualification" name="quali">
+                        </div>
+                        <div class="col">
+                          <input type="date" class="form-control" placeholder="DOB" aria-label="DOB" name="dob">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Email" name="usrnm">
+                    </div>
+                    <br>
+                    <div class="col">
+                        <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="pswd">
+                    </div>
+                    <br>
+                    <div class="col">
+                        <input type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" name="cpswd">
+                    </div>
+                    <br>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" form="regForm">Submit</button>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+{% endblock %}
