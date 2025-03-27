@@ -5,7 +5,7 @@
 
 
 <div class="hero">
-    
+
 {% for message in get_flashed_messages() %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <p>{{ message }}</p>
@@ -51,13 +51,13 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" id="adminForm">
+                        <form action="/admin_login" method="post" id="adminForm">
                             <div class="col">
                                 <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="usrnm">
                             </div>
                             <br>
                             <div class="col">
-                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="cpswd">
+                                <input type="password" class="form-control" placeholder="Password" aria-label="Password" name="pswd">
                             </div>
                             <br>
         

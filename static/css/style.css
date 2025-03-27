@@ -3,7 +3,7 @@ body {
     width: 100%;
 }
 .navbar {
-    background: linear-gradient(to bottom, #000,transparent) !important;
+    background: #000 !important;
     color: #fff !important;
 }
 .navbar h4 {
@@ -43,7 +43,14 @@ body {
     align-items: center; */
 }
 .header {
-    padding: 5%;
+    padding: 100px 3% 3% 3%;
     border-bottom: 2px black solid;
     transition: ease 0.5s;
+}
+
+#nsub, #nchap {
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    z-index: 333;
 }
