@@ -34,6 +34,7 @@ class Users(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default = False, nullable = False)
     flagged = db.Column(db.Boolean, default = False, nullable = False)
     subs = db.relationship('Subjects', secondary = 'enrollment', backref = 'enrolledSubs' )
+    chaps = db.relationship('Chapters', secondary = 'quiz', backref = 'quizChapters')
     
 class Subjects(db.Model):
     __tablename__ = 'subjects'
@@ -66,6 +67,7 @@ class Chapters(db.Model):
     sub_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), unique = False, nullable = True)
     sub = db.relationship('Subjects', backref = 'subject')
     ques = db.relationship('Questions', backref = 'question')
+    usrs = db.relationship('Users', secondary = 'quiz', backref = 'quizUser')
     
 class Questions(db.Model):
     __tablename__ = 'questions'
@@ -79,6 +81,15 @@ class Questions(db.Model):
     correct = db.Column(db.String(100), nullable = False)
     chap_id = db.Column(db.Integer, db.ForeignKey('chapters.id'), unique = False, nullable = False)
     chap = db.relationship('Chapters', backref = 'chapters')
+    
+class Quiz(db.Model):
+    __tablename__ = 'quiz'
+    
+    id = db.Column(db.Integer, primary_key = True)
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False, unique = False)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'), nullable = False, unique = False)
+    score = db.Column(db.Integer, nullable = True)
+    
 
 with app.app_context():
     db.create_all()
