@@ -65,6 +65,7 @@ class Chapters(db.Model):
     content = db.Column(db.String(500), nullable = False)
     sub_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), unique = False, nullable = True)
     sub = db.relationship('Subjects', backref = 'subject')
+    ques = db.relationship('Questions', backref = 'question')
     
 class Questions(db.Model):
     __tablename__ = 'questions'
@@ -76,7 +77,8 @@ class Questions(db.Model):
     option3 = db.Column(db.String(100), nullable = False)
     option4 = db.Column(db.String(100), nullable = False)
     correct = db.Column(db.String(100), nullable = False)
-    
+    chap_id = db.Column(db.Integer, db.ForeignKey('chapters.id'), unique = False, nullable = False)
+    chap = db.relationship('Chapters', backref = 'chapters')
 
 with app.app_context():
     db.create_all()
@@ -240,13 +242,55 @@ def edit_chap(cid):
 @app.route('/delete_chapter/<int:cid>', methods = ['GET','POST'])
 def delete_chap(cid):    
         chap = Chapters.query.get(cid)
-
         if current_user.admin :
             db.session.delete(chap)
             db.session.commit()
             return redirect(f'/chapters/{chap.sub_id}')
-        
             
+############################################################### 
+# @login_required
+# @app.route('/chapters/<int:sid>', methods = ['GET','POST'])
+# def chapters_view(sid):
+#     sub = Subjects.query.get(sid)
+#     chapters = Chapters.query.filter_by(sub_id = sid).all()
+#     return render_template('chapters.html', chaps = chapters, sub = sub)            
+@login_required
+@app.route('/add_question/<int:cid>', methods = ['POST'])
+def add_ques(cid):
+    if request.method == 'POST':      
+        question = Questions(ques = request.form.get('ques'),
+                        option1 = request.form.get('option1'),
+                        option2 = request.form.get('option2'),
+                        option3 = request.form.get('option3'),
+                        option4 = request.form.get('option4'),
+                        correct = request.form.get('answer'),
+                        chap_id = cid)
+        
+        if current_user.admin :
+            db.session.add(question)
+            db.session.commit()
+            flash('Question added succesfully.')
+            return redirect(f'/chapters/{cid}')
+# @login_required
+# @app.route('/edit_chapter/<int:cid>', methods = ['GET','POST'])
+# def edit_chap(cid):
+#     if request.method == 'POST':      
+#         chap = Chapters.query.get(cid)
+
+#         if current_user.admin :  
+#             chap.title = request.form.get('title')
+#             chap.content = request.form.get('points')
+            
+#             db.session.commit()
+#             return redirect(f'/chapters/{chap.sub_id}')     
+# @login_required
+# @app.route('/delete_chapter/<int:cid>', methods = ['GET','POST'])
+# def delete_chap(cid):    
+#         chap = Chapters.query.get(cid)
+#         if current_user.admin :
+#             db.session.delete(chap)
+#             db.session.commit()
+#             return redirect(f'/chapters/{chap.sub_id}')
 # @login_required
 # @app.route('/user_dashboard', methods = ['GET', 'POST'])
 # def user_dash():
