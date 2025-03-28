@@ -48,8 +48,8 @@ body {
     transition: ease 0.5s;
 }
 
-#nsub, #nchap {
-    position: absolute;
+#nsub, #nchap, #nques, #subQuiz {
+    position: fixed;
     right: 25px;
     bottom: 25px;
     z-index: 333;

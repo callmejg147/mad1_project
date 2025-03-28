@@ -25,7 +25,7 @@
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ chap.id }}" aria-expanded="true" aria-controls="collapse{{ chap.id }}">
-              <b>{{ chap.title }}</b>
+              <h5>{{ chap.title }}</h5>
             </button>
           </h2>
           <div id="collapse{{ chap.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionChap">
@@ -33,61 +33,16 @@
               <p>{{ chap.content }}</p>
               <br>
               {% if current_user.admin %}
-              <a type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addQues{{ chap.id }}">Add question</a>
+              <a href="/questions/{{ chap.id }}" class="btn btn-outline-primary"">View Question</a>
 
-              <div class="modal fade" id="addQues{{ chap.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add question</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/add_question/{{ chap.id }}" method="post" id="nquesForm">
-                            
-                          <div class="col mb-3">
-                            <textarea class="form-control" placeholder="Question" aria-label="First name" name="ques"></textarea>
-                          </div>
-                            <div class="row mb-3">
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option 1" aria-label="option1">
-                              </div>
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option 2" aria-label="option2">
-                              </div>
-                            </div>
-                            <div class="row mb-3">
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option 3" aria-label="option3">
-                              </div>
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option 4" aria-label="option4">
-                              </div>
-                            </div>
-                            <div class="col mb-3">
-                              <input type="text" class="form-control" placeholder="Correct Answer" aria-label="answer" name="ans">
-                            </div>
-                        </form>
-
-                        
-                    </div>
-                    
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="nquesForm">Submit</button>
-                    </div>
-
-                </div>
-                </div>
-            </div>
-
+             
               <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editChap{{ chap.id }}" >Edit chapter</a>
               <!-- model -->
               <div class="modal fade" id="editChap{{ chap.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create new subject</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit chapter</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -111,77 +66,6 @@
               </div>
 
               <a href="/delete_chapter/{{ chap.id }}" class="btn btn-danger">Delete</a>
-
-              <div>
-                <h6 class="mb-2 mt-4">Questions:</h6>
-                <div class="row">
-
-                  {% for question in questions %}
-                  <div class="col-sm-6 mb-3">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title mb-2">{{ question.ques }}</h5>
-                        <p class="card-text">{{ question.option1 }}</p>
-                        <p class="card-text">{{ question.option2 }}</p>
-                        <p class="card-text">{{ question.option3 }}</p>
-                        <p class="card-text">{{ question.option4 }}</p>
-                        {% if current_user.admin %}
-                        <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editQues{{ question.id }}" >Edit</a>
-                          <!-- modal -->
-                        <div class="modal fade" id="editQues{{ question.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit question</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                  <form action="/edit_question/{{ question.id }}" method="post" id="editquesForm{{ question.id }}">
-                                    <div class="col mb-3">
-                                      <textarea class="form-control" placeholder="Question" aria-label="First name" name="ques"></textarea>
-                                    </div>
-                                      <div class="row mb-3">
-                                        <div class="col">
-                                          <input type="text" class="form-control" placeholder="Option 1" name="option1">
-                                        </div>
-                                        <div class="col">
-                                          <input type="text" class="form-control" placeholder="Option 2" name="option2">
-                                        </div>
-                                      </div>
-                                      <div class="row mb-3">
-                                        <div class="col">
-                                          <input type="text" class="form-control" placeholder="Option 3" name="option3">
-                                        </div>
-                                        <div class="col">
-                                          <input type="text" class="form-control" placeholder="Option 4" name="option4">
-                                        </div>
-                                      </div>
-                                      <div class="col mb-3">
-                                        <input type="text" class="form-control" placeholder="Correct Answer" name="answer" name="ans">
-                                      </div>
-                                  </form>
-                              </div>
-                              <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary" form="editquesForm{{ question.id }}">Submit</button>
-                              </div>
-                          </div>
-                          </div>
-                        </div>
-                        <!-- end modal -->
-                        <a href="/delete_question/{{ question.id }}" class="btn btn-danger">Delete</a>
-                        <a href="/chapters/{{ sub.id }}" class="btn btn-outline-primary">View Chapters</a>
-                        {% elif current_user.is_authenticated %}
-                        <a href="#" class="btn btn-primary">Enroll</a>
-                        {% else %}
-                        <br>
-                        <i>- login to enroll</i>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                  {% endfor %}
-              </div>
               {% else %}
               <a href="#" class="btn btn-primary">Take Quiz</a>
               {% endif %}

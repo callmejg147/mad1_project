@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="header">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <h1>{{ current_user.fname }} {{ current_user.lname }}</h1>
+    <p>{{ current_user.dob }}</p>
+    <p>{{ current_user.qualification }}</p>
+</div>
+
+<div style="padding: 3%;">
+    <div class="row">
+        {% for user in users %}
+        <div class="col-sm-3 mb-3">
+          <div class="card">
+            <div class="card-header">
+                {{ user.username }}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ user.fname }} {{ user.lname }}</h5>
+              <p class="card-text"><b>DOB :</b> {{ user.dob }}</p>
+              <p class="card-text"><b>Email :</b> {{ user.email }}</p>
+              <a href="#" class="btn btn-warning">Flag</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        
+      </div>
+</div>
+
+{% endblock %}

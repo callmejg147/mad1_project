@@ -107,6 +107,8 @@ def add_user():
                                  password = hashlib.md5(request.form.get('pswd').encode('utf-8')).hexdigest())
                     db.session.add(user)
                     db.session.commit()
+                    
+                    flash('Registered successfully. Please login to continue.')
                     return redirect('/')
                 else:
                     print('passwords do not match')
@@ -212,7 +214,8 @@ def delete_sub(sid):
 def chapters_view(sid):
     sub = Subjects.query.get(sid)
     chapters = Chapters.query.filter_by(sub_id = sid).all()
-    return render_template('chapters.html', chaps = chapters, sub = sub)            
+    ques = Questions.query.all()
+    return render_template('chapters.html', chaps = chapters, sub = sub, ques = ques)            
 @login_required
 @app.route('/add_chapter/<int:sid>', methods = ['POST'])
 def add_chap(sid):
@@ -253,7 +256,14 @@ def delete_chap(cid):
 # def chapters_view(sid):
 #     sub = Subjects.query.get(sid)
 #     chapters = Chapters.query.filter_by(sub_id = sid).all()
-#     return render_template('chapters.html', chaps = chapters, sub = sub)            
+#     return render_template('chapters.html', chaps = chapters, sub = sub)
+@login_required
+@app.route('/questions/<int:cid>', methods = ['GET','POST'])
+def questions_view(cid):
+    chap = Chapters.query.get(cid)
+    subject = chap.sub.name
+    ques = Questions.query.filter_by(chap_id = cid).all()
+    return render_template('questions.html', ques = ques, subject = subject, chap = chap)        
 @login_required
 @app.route('/add_question/<int:cid>', methods = ['POST'])
 def add_ques(cid):
@@ -263,34 +273,47 @@ def add_ques(cid):
                         option2 = request.form.get('option2'),
                         option3 = request.form.get('option3'),
                         option4 = request.form.get('option4'),
-                        correct = request.form.get('answer'),
+                        correct = request.form.get('ans'),
                         chap_id = cid)
-        
+        chap = Chapters.query.get(cid)
         if current_user.admin :
             db.session.add(question)
             db.session.commit()
             flash('Question added succesfully.')
-            return redirect(f'/chapters/{cid}')
-# @login_required
-# @app.route('/edit_chapter/<int:cid>', methods = ['GET','POST'])
-# def edit_chap(cid):
-#     if request.method == 'POST':      
-#         chap = Chapters.query.get(cid)
+            return redirect(f'/chapters/{chap.sub_id}')
+@login_required
+@app.route('/edit_question/<int:qid>', methods = ['GET','POST'])
+def edit_ques(qid):
+    if request.method == 'POST':      
+        question = Questions.query.get(qid)
 
-#         if current_user.admin :  
-#             chap.title = request.form.get('title')
-#             chap.content = request.form.get('points')
+        if current_user.admin :  
+            question.ques = request.form.get('ques')
+            question.option1 = request.form.get('option1')
+            question.option2 = request.form.get('option2')
+            question.option3 = request.form.get('option3')
+            question.option4 = request.form.get('option4')
+            question.correct = request.form.get('ans')
             
-#             db.session.commit()
-#             return redirect(f'/chapters/{chap.sub_id}')     
-# @login_required
-# @app.route('/delete_chapter/<int:cid>', methods = ['GET','POST'])
-# def delete_chap(cid):    
-#         chap = Chapters.query.get(cid)
-#         if current_user.admin :
-#             db.session.delete(chap)
-#             db.session.commit()
-#             return redirect(f'/chapters/{chap.sub_id}')
+            db.session.commit()
+            return redirect(f'/questions/{question.chap_id}')     
+@login_required
+@app.route('/delete_question/<int:qid>', methods = ['GET','POST'])
+def delete_ques(qid):    
+        question = Questions.query.get(qid)
+        cid = question.chap_id
+        if current_user.admin :
+            db.session.delete(question)
+            db.session.commit()
+            return redirect(f'/questions/{cid}')
+        
+        
+@login_required
+@app.route('/users', methods = ['GET','POST'])
+def users_view():
+    if current_user.admin:
+        users = Users.query.filter_by(admin=0).all()
+        return render_template('users.html', users=users)
 # @login_required
 # @app.route('/user_dashboard', methods = ['GET', 'POST'])
 # def user_dash():

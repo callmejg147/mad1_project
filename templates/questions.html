@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="header">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <h1>{{ current_user.fname }} {{ current_user.lname }}</h1>
+    <p>{{ current_user.dob }}</p>
+    <p>{{ current_user.qualification }}</p>
+</div>
+
+<div style="padding: 3%;">
+    <div>
+        <h2>{{ subject }} </h2>
+        <h5>-{{ chap.title }}</h5>
+    </div>
+    <br>
+    <div>
+        <!-- <h6 class="mb-2 mt-4">Questions:</h6> -->
+        {% if not current_user.admin %}
+        <form action="/submit_quiz/{{ chap.id }}/{{ current_user.id }}" method="post" id="quizForm">
+        {% endif %}
+
+        <div class="row">
+        
+        {% for question in ques %}
+        {% if question.chap_id == chap.id %}
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">{{ question.ques }}</h5>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" id="flexRadioDefault1" value="{{ question.option1 }}">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        {{ question.option1 }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" id="flexRadioDefault2" value="{{ question.option2 }}">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        {{ question.option2 }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" id="flexRadioDefault1" value="{{ question.option3 }}">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        {{ question.option3 }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" id="flexRadioDefault2" value="{{ question.option4 }}">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        {{ question.option4 }}
+                    </label>
+                </div>
+                <br>
+                {% if current_user.admin %}
+                <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editQues{{ question.id }}" >Edit</a>
+                <!-- modal -->
+                <div class="modal fade" id="editQues{{ question.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit question</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/edit_question/{{ question.id }}" method="post" id="editquesForm{{ question.id }}">
+                            <div class="col mb-3">
+                            <textarea class="form-control" placeholder="Question" aria-label="First name" name="ques">{{ question.ques }}</textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Option 1" name="option1" value="{{ question.option1 }}">
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Option 2" name="option2" value="{{ question.option2 }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Option 3" name="option3" value="{{ question.option3 }}">
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Option 4" name="option4" value="{{ question.option4 }}">
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <input type="text" class="form-control" placeholder="Correct Answer" name="ans" value="{{ question.correct }}">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="editquesForm{{ question.id }}">Submit</button>
+                    </div>
+                </div>
+                </div>
+                </div>
+                <!-- end modal -->
+                <a href="/delete_question/{{ question.id }}" class="btn btn-danger">Delete</a>
+
+                {% endif %}
+            </div>
+            </div>
+        </div> 
+        {% endif %}
+        {% endfor %}
+        
+    </div>
+    {% if not current_user.admin %}
+    </form>
+    {% endif %}
+    {% if not current_user.admin %}
+    <button type="submit" class="btn btn-primary" form="quizForm" id="subQuiz">Submit Quiz</button>
+    {% endif %}
+
+
+    <a type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addQues{{ chap.id }}" id="nques">Add question</a>
+
+    <div class="modal fade" id="addQues{{ chap.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add question</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form action="/add_question/{{ chap.id }}" method="post" id="nquesForm">
+                  
+                <div class="col mb-3">
+                  <textarea class="form-control" placeholder="Question" aria-label="First name" name="ques"></textarea>
+                </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Option 1" name="option1">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Option 2" name="option2">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Option 3" name="option3">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Option 4" name="option4">
+                    </div>
+                  </div>
+                  <div class="col mb-3">
+                    <input type="text" class="form-control" placeholder="Correct Answer" aria-label="answer" name="ans">
+                  </div>
+              </form>
+
+              
+          </div>
+          
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="nquesForm">Submit</button>
+          </div>
+
+      </div>
+      </div>
+  </div>    
+{% endblock %}
