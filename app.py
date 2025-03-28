@@ -314,6 +314,17 @@ def users_view():
     if current_user.admin:
         users = Users.query.filter_by(admin=0).all()
         return render_template('users.html', users=users)
+    
+    
+@login_required
+@app.route('/enroll/<int:uid>/<int:sid>', methods = ['GET','POST'])
+def enroll_user(uid, sid):
+    enroll = Enrollment(student_id = uid,
+                        subject_id = sid)
+    if current_user.is_authenticated:
+        db.session.add(enroll)
+        db.session.commit()
+        return redirect('/subjects')
 # @login_required
 # @app.route('/user_dashboard', methods = ['GET', 'POST'])
 # def user_dash():

@@ -54,3 +54,9 @@ body {
     bottom: 25px;
     z-index: 333;
 }
+
+.chapTitle {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+}

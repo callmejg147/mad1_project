@@ -117,12 +117,8 @@
     </div>
     {% if not current_user.admin %}
     </form>
-    {% endif %}
-    {% if not current_user.admin %}
     <button type="submit" class="btn btn-primary" form="quizForm" id="subQuiz">Submit Quiz</button>
-    {% endif %}
-
-
+    {% else %}
     <a type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addQues{{ chap.id }}" id="nques">Add question</a>
 
     <div class="modal fade" id="addQues{{ chap.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -167,7 +163,10 @@
           <button type="submit" class="btn btn-primary" form="nquesForm">Submit</button>
           </div>
 
-      </div>
-      </div>
-  </div>    
+        </div>
+        </div>
+    </div>
+    {% endif %}
+
+        
 {% endblock %}
