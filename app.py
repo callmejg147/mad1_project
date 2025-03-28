@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 import hashlib
+from functions import score_calc
 
 app = Flask(__name__)
 
@@ -80,7 +81,7 @@ class Questions(db.Model):
     option4 = db.Column(db.String(100), nullable = False)
     correct = db.Column(db.String(100), nullable = False)
     chap_id = db.Column(db.Integer, db.ForeignKey('chapters.id'), unique = False, nullable = False)
-    chap = db.relationship('Chapters', backref = 'chapters')
+    chap = db.relationship('Chapters', backref = 'chaps')
     
 class Quiz(db.Model):
     __tablename__ = 'quiz'
@@ -225,8 +226,9 @@ def delete_sub(sid):
 def chapters_view(sid):
     sub = Subjects.query.get(sid)
     chapters = Chapters.query.filter_by(sub_id = sid).all()
+    quizs = Quiz.query.filter_by(student_id=current_user.id)
     ques = Questions.query.all()
-    return render_template('chapters.html', chaps = chapters, sub = sub, ques = ques)            
+    return render_template('chapters.html', chaps = chapters, sub = sub, ques = ques, quizs = quizs)            
 @login_required
 @app.route('/add_chapter/<int:sid>', methods = ['POST'])
 def add_chap(sid):
@@ -336,6 +338,31 @@ def enroll_user(uid, sid):
         db.session.add(enroll)
         db.session.commit()
         return redirect('/subjects')
+    
+    
+@login_required
+@app.route('/submit_quiz/<int:cid>/<int:uid>', methods = ['GET','POST'])
+def submit_q(cid, uid):
+    chap = Chapters.query.get(cid)
+
+    
+    total = score_calc(chap)
+    q = Quiz.query.filter(Quiz.student_id == uid, Quiz.chapter_id == cid).first()
+    if q is not None:
+        if q.score <= total:
+            q.score = total
+            db.session.commit()
+            return redirect(f'/chapters/{chap.sub_id}')
+        else:
+            return redirect(f'/chapters/{chap.sub_id}')
+    else:
+        quizz = Quiz(student_id = uid,
+                 chapter_id = cid,
+                 score = total)
+        # print(chap)
+        db.session.add(quizz)
+        db.session.commit()
+        return redirect(f'/chapters/{chap.sub_id}')
 # @login_required
 # @app.route('/user_dashboard', methods = ['GET', 'POST'])
 # def user_dash():
