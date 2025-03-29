@@ -36,6 +36,9 @@ class Users(db.Model, UserMixin):
     flagged = db.Column(db.Boolean, default = False, nullable = False)
     subs = db.relationship('Subjects', secondary = 'enrollment', backref = 'enrolledSubs' )
     chaps = db.relationship('Chapters', secondary = 'quiz', backref = 'quizChapters')
+    name = db.Column(db.String(100))
+    
+
     
 class Subjects(db.Model):
     __tablename__ = 'subjects'
@@ -112,6 +115,7 @@ def add_user():
                 if request.form.get('pswd') == request.form.get('cpswd'):
                     user = Users(fname = request.form.get('fname'),
                                  lname = request.form.get('lname'),
+                                 name = request.form.get('fname') + ' ' + request.form.get('lname'),
                                  email = request.form.get('email'),
                                  dob = request.form.get('dob'),
                                  qualification = request.form.get('quali'),
@@ -172,7 +176,22 @@ def logout_usr():
 @app.route('/admin_dash',methods = ['GET', 'POST'])
 def admin_view():
     if current_user.admin:
-        return render_template('admin_dash.html')
+        subs = Subjects.query.all()
+        population = {}
+        for sub in subs:
+            population[sub.name] = len(sub.usrs)
+
+        subjects = list(population.keys()) 
+        s_count = list(population.values())
+        ucount = len(list(Users.query.filter_by(admin=0).all()))
+        scount = len(list(Subjects.query.all()))
+        fcount = len(list(Users.query.filter_by(flagged=1).all()))
+        return render_template('admin_dash.html', 
+                               subjects = subjects, 
+                               students = s_count, 
+                               ucount = ucount, 
+                               scount = scount, 
+                               fcount = fcount)
 @login_required
 @app.route('/user_dash',methods = ['GET', 'POST'])
 def user_view():
@@ -326,7 +345,16 @@ def delete_ques(qid):
 def users_view():
     if current_user.admin:
         users = Users.query.filter_by(admin=0).all()
-        return render_template('users.html', users=users)
+        quizs = Quiz.query.all()
+        return render_template('users.html', users=users, quizs = quizs)
+
+@app.route('/flag_user/<int:uid>', methods = ['POST','GET'])
+def flag_usr(uid):
+    user = Users.query.get(uid)
+    if current_user.admin:
+        user.flagged = True
+        db.session.commit()
+        return redirect('/users')
     
     
 @login_required
@@ -363,6 +391,23 @@ def submit_q(cid, uid):
         db.session.add(quizz)
         db.session.commit()
         return redirect(f'/chapters/{chap.sub_id}')
+    
+@app.route('/search_subjects', methods = ['GET','POST'])
+def search_sub():
+    if request.method == 'POST':
+        searched = request.form.get('keyword')
+        subs = Subjects.query.filter(Subjects.name.like('%' + searched + '%')).all()
+
+        return render_template('subjects.html', subs = subs)
+    
+@app.route('/search_students', methods = ['GET','POST'])
+def search_stud():
+    if request.method == 'POST':
+        searched = request.form.get('keyword')
+        studs = Users.query.filter(Users.name.like('%' + searched + '%'), Users.admin == 0).all()
+        print(searched, studs)
+        return render_template('users.html', users = studs)
+        
 # @login_required
 # @app.route('/user_dashboard', methods = ['GET', 'POST'])
 # def user_dash():

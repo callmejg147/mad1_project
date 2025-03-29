@@ -26,7 +26,7 @@
           <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ chap.id }}" aria-expanded="true" aria-controls="collapse{{ chap.id }}">
               <div class="chapTitle">
-              <h5>{{ chap.title }}</h5> <h5>Score : {% for quiz in quizs %}{% if quiz.chapter_id == chap.id %}{{ quiz.score }} {% endif %}{% endfor %}</h5>
+              <h5>{{ chap.title }}</h5> <h5>{% if current_user.admin==0 %}Score : {% for quiz in quizs %}{% if quiz.chapter_id == chap.id %}{{ quiz.score }}{% else %}00{% endif %}{% endfor %}{% endif %}</h5>
               </div>
             </button>
           </h2>

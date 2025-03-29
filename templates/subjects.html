@@ -16,6 +16,12 @@
 </div>
 
 <div style="padding: 3%;">
+    <div class="mb-3 d-flex justify-content-end" style="width:100%;">
+      <form class="d-flex" role="search" action="/search_subjects" method="post">
+        <input class="form-control me-2" type="search" placeholder="Search Subjects" aria-label="Search" name="keyword">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
     <div class="row">
 
         {% for sub in subs %}

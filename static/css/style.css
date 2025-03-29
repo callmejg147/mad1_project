@@ -60,3 +60,7 @@ body {
     justify-content: space-between;
     width: 95%;
 }
+
+#lout {
+    margin: 0 15px 20px 15px;
+}

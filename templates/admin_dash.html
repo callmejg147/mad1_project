@@ -15,4 +15,72 @@
     <p>{{ current_user.qualification }}</p>
 </div>
 
+<div style="padding: 3%;" align="center">
+    <div class="mb-3">
+        <div class="row">
+            <div class="col-sm-4 mb-3">
+              <div class="card text-bg-dark">
+                <div class="card-header" align="center">
+                    Total Students
+                </div>
+                <div class="card-body" align="center"> 
+                    <h1>{{ ucount }}</h1>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4 mb-3">
+                <div class="card text-bg-dark">
+                    <div class="card-header" align="center">
+                        Total Subjects
+                    </div>
+                    <div class="card-body" align="center"> 
+                        <h1>{{ scount }}</h1>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-sm-4 mb-3">
+                <div class="card text-bg-dark">
+                    <div class="card-header" align="center">
+                        Flagged Students
+                    </div>
+                    <div class="card-body" align="center"> 
+                        <h1>{{ fcount }}</h1>
+                    </div>
+                  </div>
+            </div>
+          </div>
+    </div>
+
+    <canvas id="studentPlot"></canvas>
+
+</div>
+
+<script>
+    var ctx = document.getElementById('studentPlot').getContext('2d');
+    var boxChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ subjects|safe }},
+            datasets: [
+            {
+                label: "Student Population",
+                data: {{ students|safe }},
+                maxBarThickness: 100,
+                borderWidth: 2,
+            }
+            ]
+        },
+    options: {
+
+
+        scales: {
+                y: {
+                    grace: 2
+                }
+            },
+        maintainAspectRatio: true,
+     
+    }
+    });
+</script>
 {% endblock %}
